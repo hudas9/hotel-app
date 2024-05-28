@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  first_name    String    @db.VarChar(100)
+  last_name     String    @db.VarChar(100)
+  email         String    @unique
+  gender        Gender
+  password      String    @db.VarChar(100)
+  role          Role      @default(USER)
+  creation_time DateTime  @default(now())
+  create_id     Int?
+  update_time   DateTime  @default(now())
+  update_id     Int?
+  archived      Boolean   @default(false)
+
+  @@map("tbl_user")
+}
+
+// model Room {
+//   id            String   @id @default(uuid())
+//   roomNumber    String   @unique
+//   type          String
+//   pricePerNight Float
+//   description   String
+//   facility      Facility[]
+//   createdAt     DateTime @default(now())
+//   updatedAt     DateTime @updatedAt
+//   reservations  Reservation[]
+
+//   @@map("tbl_room")
+// }
+
+// model Facility {
+//   id        String   @id @default(uuid())
+//   name      String
+//   icon      String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   room Room @relation(fields: [roomId], references: [id])
+//   roomId String
+
+//   @@map("tbl_facility")
+// }
+
+// model Reservation {
+//   id         String   @id @default(uuid())
+//   userId     String
+//   roomId     String
+//   checkIn    DateTime
+//   checkOut   DateTime
+//   totalPrice Float
+//   status     String
+//   createdAt  DateTime @default(now())
+//   updatedAt  DateTime @updatedAt
+
+//   user User @relation(fields: [userId], references: [id])
+//   room Room @relation(fields: [roomId], references: [id])
+
+//   @@map("tbl_reservation")
+// }
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
